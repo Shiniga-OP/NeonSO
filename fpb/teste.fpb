@@ -1,0 +1,5 @@
+#global fpb();
+
+vazio fpb() {
+    escrever("[FPB]: teste de FPB funcionando\n");
+}

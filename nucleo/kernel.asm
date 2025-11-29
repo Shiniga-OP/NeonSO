@@ -24,6 +24,8 @@ fim_zerar_bss:
     ldr x0, = msg_kernel
     bl _escrever_tex
     
+    bl fpb
+    
     // inicia uma sessão NS:
     bl ns_abrir
     // loop infinito
