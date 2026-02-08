@@ -1,11 +1,3 @@
-virtio_mmio_write: bad register offset (0x74)
-virtio_mmio_write: bad register offset (0x74)
-virtio_mmio_write: bad register offset (0x74)
-virtio_mmio_write: bad register offset (0x74)
-virtio_mmio_write: write to read-only register (0x34)
-virtio_mmio_write: write to legacy register (0x3c) in non-legacy mode
-virtio_mmio_write: bad register offset (0x48)
-virtio_mmio_write: bad register offset (0x74)
 virtio_mmio_write: write to read-only register (0x60)
 virtio_mmio_write: write to read-only register (0x60)
 virtio_mmio_write: write to read-only register (0x60)

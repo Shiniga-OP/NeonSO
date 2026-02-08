@@ -1,10 +1,8 @@
 // biblis/ns.fpb
 #incluir "biblis/texs.fpb";
+
 #global ns_abrir();
-/*
-#global car* status = "-status";
-#global car* ajuda = "-ajuda";
-*/
+
 #global car[64] comando;
 #global int conta = 0;
 #global int cor = 0xFFFF0000;
@@ -13,6 +11,7 @@ car _obter_car();
 vazio ns_loop();
 vazio mudar_cor();
 vazio _att_tela();
+vazio _render_retangulo(int x, int y, int largura, int altura, byte cor);
 vazio _limpar_tela(byte cor);
 
 vazio ns_abrir() {
@@ -34,7 +33,6 @@ vazio ns_loop() {
         se(conta > 0) {
             conta--;
             comando[conta] = '\0';
-            
             // sequencia pra apagar visualmente no terminal:
             // retroceder, espaço(apaga), retroceder
             escrever((car)0x08, ' ', (car)0x08);
@@ -49,6 +47,9 @@ vazio ns_loop() {
             escrever("[Comandos]:\n-status: status do kernel\n");
         } senao se(texcmp(comando, "-cor")) {
             mudar_cor();
+        } senao se(texcmp(comando, "-render")) {
+            _render_retangulo(100, 100, 400, 200, 0xFFFF0000);
+            _att_tela();
         } senao se(conta > 0) {
             escrever("Erro: '", comando, "' não reconhecido\n");
         }

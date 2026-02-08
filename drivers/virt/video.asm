@@ -353,7 +353,7 @@ _att_tela:
     ret
 
 _limpar_tela:
-    // x0 = cor no formato BGRA(0xAARRGGBB)
+    // x0 = cor no formato BGRA
     stp x29, x30, [sp, -16]!
     
     // salva a cor em w19
@@ -374,8 +374,89 @@ loop_limpar:
     ret
 
 _escrever_pixel:
+    // x0 = x(coluna)
+    // x1 = y(linha)
+    // w2 = cor(formato BGRA)
+    
+    // valida coordenadas
+    mov x3, LARGURA
+    cmp x0, x3
+    b.ge pixel_fora // se x >= LARGURA, retorna
+    
+    mov x3, ALTURA
+    cmp x1, x3
+    b.ge pixel_fora // se y >= ALTURA, retorna
+    
+    // calcula o posição: (y * LARGURA + x) * 4
+    mov x3, LARGURA
+    mul x3, x1, x3  // y * LARGURA
+    add x3, x3, x0  // + x
+    lsl x3, x3, 2   // * 4 bytes
+    
+    // escreve no quadrobuffer
+    ldr x4, = QUADROBUFFER
+    str w2, [x4, x3]
+pixel_fora:
     ret
 
-_desenhar_retangulo:
+_render_retangulo:
+    // x0 = x inicial
+    // x1 = y inicial
+    // x2 = largura
+    // x3 = altura
+    // w4 = cor(formato BGRA)
+    
+    stp x19, x20, [sp, -16]!
+    stp x21, x22, [sp, -16]!
+    stp x23, x24, [sp, -16]!
+    
+    // salva parametros
+    mov x19, x0 // x inicial
+    mov x20, x1 // y inicial
+    mov x21, x2 // largura
+    mov x22, x3 // altura
+    mov w23, w4 // cor
+    
+    // valida se o retangulo esta dentro da tela
+    mov x5, LARGURA
+    add x6, x19, x21 // x_fim = x + largura
+    cmp x6, x5
+    b.gt ret_invalido
+    
+    mov x5, ALTURA
+    add x6, x20, x22 // y_fim = y + altura
+    cmp x6, x5
+    b.gt ret_invalido
+    
+    // loop externo(linhas)
+    mov x24, x20 // y atual
+loop_y_ret:
+    // loop interno(colunas)
+    mov x0, x19 // x atual
+loop_x_ret:
+    // calcula posição e escreve pixel
+    mov x5, LARGURA
+    mul x5, x24, x5 // y * LARGURA
+    add x5, x5, x0 // + x
+    lsl x5, x5, 2 // * 4 bytes
+    
+    ldr x6, = QUADROBUFFER
+    str w23, [x6, x5]
+    
+    // proxima coluna
+    add x0, x0, 1
+    add x7, x19, x21 // x_fim = x_inicial + largura
+    cmp x0, x7
+    b.lt loop_x_ret
+    
+    // proxima linha
+    add x24, x24, 1
+    add x7, x20, x22 // y_fim = y_inicial + altura
+    cmp x24, x7
+    b.lt loop_y_ret
+ret_invalido:
+    ldp x23, x24, [sp], 16
+    ldp x21, x22, [sp], 16
+    ldp x19, x20, [sp], 16
     ret
     
