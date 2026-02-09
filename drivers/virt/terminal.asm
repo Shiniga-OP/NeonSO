@@ -48,12 +48,11 @@ _obter_car:
     ldrb w0, [x9, x3]
     ret
 _escrever_tex:
-    // preserva registradores
     stp x0, x1, [sp, -16]!
     stp x2, x4, [sp, -16]!
     
-    ldr x1, = uart_base_real
-    ldr x1, [x1]
+    mov x1, 0x09000000      // UART base hardcoded, não usa variável!
+    
 1:
     ldrb w2, [x0], 1
     cbz w2, 2f
@@ -61,7 +60,6 @@ _escrever_tex:
     strb w2, [x1, x4]
     b 1b
 2:
-    // restaura registradores
     ldp x2, x4, [sp], 16
     ldp x0, x1, [sp], 16
     ret

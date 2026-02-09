@@ -37,7 +37,7 @@ SECTIONS {
     
     . = ALIGN(16);
     _pilha_inicio = .;
-    . += 0x4000;
+    . += 0x100000;
     _pilha_fim = .;
 }
 

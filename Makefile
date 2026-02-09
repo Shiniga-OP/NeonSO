@@ -5,7 +5,7 @@ FPB_FONTE := biblis/ns
 FPB_FONTE_CAMINHO := $(FPB_FONTE)
 
 compilar_fpb:
-	$(FPB) $(FPB_FONTE) -asm -O2 -sl
+	$(FPB) $(FPB_FONTE) -asm -sl -O2
 	
 FPB_ASM := $(wildcard $(dir $(FPB_FONTE_CAMINHO))*.asm)
 

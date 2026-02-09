@@ -46,7 +46,7 @@ _carregar_kernel:
 
     // carrega kernel do setor 64
     mov x0, 64 // setor
-    mov x1, 8 // numero de setores
+    mov x1, 32 // numero de setores
     ldr x2, = 0x40200000 // destino(endereço do kernel)
     mov x3, x19
     bl _ler_setores

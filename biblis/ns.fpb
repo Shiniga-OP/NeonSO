@@ -17,6 +17,13 @@ vazio _limpar_tela(int cor);
 vazio ns_abrir() {
     escrever("[FPB]: teste de FPB funcionando\n");
     escrever("[Neon Script]: abrindo sessão...\n");
+    escrever("[Neon Script]: sessão iniciada\n\n")
+    escrever(
+        "[NEON]: Inicializado com sucesso\n",
+        "[Direitos Autorais]: Foca-do Estúdios\n",
+        "[Autor]: Shiniga-OP\n\n",
+        "Digite \"-ajuda\" para ver todos os comandos!\n\n"
+    );
     escrever("~ $ ");
     // inicia o buffer de comando
     por(int i = 0; i < 64; i++) {
@@ -44,7 +51,11 @@ vazio ns_loop() {
             escrever("[Arquitetura]: ARM64\n[Bibliotecas]: Neon Script 0.0.2\n");
             escrever("[Pilha]: 16 KB\n");
         } senao se(texcmp(comando, "-ajuda")) {
-            escrever("[Comandos]:\n-status: status do kernel\n");
+            escrever(
+                "[Comandos]:\n",
+                "-status: status do kernel\n",
+                "-cor: muda a cor da tela (azul, vermelho e verde)\n",
+                "-render: desenha um retangulo vermelho na tela\n");
         } senao se(texcmp(comando, "-cor")) {
             mudar_cor();
         } senao se(texcmp(comando, "-render")) {
@@ -68,8 +79,11 @@ vazio ns_loop() {
             conta++;
         }
     }
-    
-    ns_loop();
+    _asm_(
+        "ldp x29, x30, [sp, 144]\n",
+        "add sp, sp, 160\n",
+        "b ns_loop\n"
+    );
 }
 
 vazio mudar_cor() {
