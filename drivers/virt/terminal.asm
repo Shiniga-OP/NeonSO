@@ -71,8 +71,7 @@ _escrever_saida:
     mov x2, x0 // buffer pra x2
     mov x3, x1 // conta pra x3
     
-    ldr x4, = uart_base_real
-    ldr x4, [x4]
+    ldr x4, = UART_BASE
     ldr x5, = UART_DR
 1:
     cbz x3, 2f // Se conta == 0, termina

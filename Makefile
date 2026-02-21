@@ -21,9 +21,11 @@ BOOTLOADER_OBJETOS=$(BOOTLOADER_CODIGOS:.asm=.o)
 KERNEL_CODIGOS= \
 	nucleo/kernel.asm \
 	nucleo/excecoes.asm \
+	nucleo/chamadasistema.asm \
 	drivers/virt/terminal.asm \
 	drivers/virt/video.asm \
-	biblis/ns.asm
+	biblis/ns.asm \
+	testes/teste_svc.asm
 
 KERNEL_OBJETOS=$(KERNEL_CODIGOS:.asm=.o)
 
@@ -77,6 +79,22 @@ qemu: disco.img
 	-global virtio-mmio.force-legacy=false \
 	-serial stdio \
 	-vnc :1 \
+	-d in_asm -D qemu.log \
+	-d guest_errors \
+	-D debug.log
+
+qemupc: disco.img
+	qemu-system-aarch64 \
+	-machine virt,virtualization=on \
+	-cpu cortex-a53 \
+	-m 128M \
+	-device loader,file=bootloader.bin,addr=0x40100000,cpu-num=0 \
+	-drive if=none,file=disco.img,format=raw,id=hd0 \
+	-device virtio-blk-device,drive=hd0 \
+	-device virtio-gpu-device \
+	-global virtio-mmio.force-legacy=false \
+	-serial stdio \
+	-display gtk \
 	-d in_asm -D qemu.log \
 	-d guest_errors \
 	-D debug.log

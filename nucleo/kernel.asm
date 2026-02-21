@@ -22,13 +22,18 @@ fim_zerar_bss:
     
     // configura UART
     bl _config_uart
+
+    bl ligar_mmu
     
+    // configura vetores de exceção
+    bl _config_excecao
+
     // mensagem de confirmação
     ldr x0, = msg_kernel
     bl _escrever_tex
     
-    // configura vetores de exceção
-    bl _config_excecao
+    // testa chamadas de sistema(desce pra EL0 e volta)
+    bl _testar_svc
     
     bl _iniciar_video
     
@@ -39,10 +44,8 @@ fim_zerar_bss:
     wfe
     b 1b
 
-// ============================================================
-// liga MMU em EL1, identidade 1:1
+// === liga MMU em EL1, identidade 1:1 ===
 // tabela L1
-// ============================================================
 .section .bss
 .align 12
 tt_l1:
@@ -75,14 +78,14 @@ limpar_mmu_loop:
     mov x1, 0x00000000
     orr x1, x1, (1 << 10) // AF = 1
     orr x1, x1, (1 << 2)  // AttrIndx[1]
-    orr x1, x1, 0x1        // valida o bloco
-    str x1, [x0, 0]        // L1[0]
+    orr x1, x1, 0x1 // valida o bloco
+    str x1, [x0, 0] // L1[0]
 
     // mapea RAM(0x40000000 - 0x7FFFFFFF) -> normal WBWA(Attr 0)
     ldr x1, = 0x40000000
     orr x1, x1, (1 << 10) // AF = 1
-    orr x1, x1, 0x1        // valida o bloco
-    str x1, [x0, 8]        // L1[1]
+    orr x1, x1, 0x1 // valida o bloco
+    str x1, [x0, 8] // L1[1]
 
     // força os dados da tabela a sairem do cache e irem pra RAM fisica
     dc cvac, x0                 

@@ -6,7 +6,7 @@
 // MACROS
 // macro que salva todos os registradores de proposito geral na pilha
 .macro salvar_contexto
-    sub sp, sp, 272
+    sub sp, sp, 288
     stp x0, x1, [sp, 0]
     stp x2, x3, [sp, 16]
     stp x4, x5, [sp, 32]
@@ -28,7 +28,7 @@
     stp x0, x1, [sp, #248]
     mrs x0, esr_el1
     mrs x1, far_el1
-    stp x0, x1, [sp, 260]  // esr e far por último(usados nos casos)
+    stp x0, x1, [sp, 264]  // esr e far por último(usados nos casos)
 .endm
 
 // macro que restaura contexto e volta da exceção
@@ -52,7 +52,7 @@
     ldp x26, x27, [sp, 208]
     ldp x28, x29, [sp, 224]
     ldr x30, [sp, 240]
-    add sp, sp, 272
+    add sp, sp, 288
     eret
 .endm
 
@@ -157,7 +157,7 @@ _loop_trava:
     wfe
     b _loop_trava
 
-// CASOS ESPECÍFICOS
+// CASOS ESPECIFICOS
 // cada um salva x19, carrega a mensagem de tipo, e chama _caso_fatal
 // === EL1t ===
 caso_sinc_el1t:
@@ -185,10 +185,42 @@ caso_fiq_el1h:
 caso_errosistema_el1h:
     ldr x19, =msg_tipo_errosistema
     b _caso_fatal
-// === EL0 64-bit ===
+/* === EL0 64-bit ===
+* verifica se é SVC(EC=0x15) antes de tratar como erro fatal
+* x8 = número da chamada de sistema
+* x0–x5 = argumentos
+* x0 = retorno
+*/
 caso_sinc_el0_64:
+    salvar_contexto
+    mrs x0, esr_el1
+    lsr x0, x0, 26
+    and x0, x0, 0x3F
+    cmp x0, 0x15
+    b.eq _tratar_chamadasistema
     ldr x19, = msg_tipo_sinc_el0
     b _caso_fatal
+/*
+* _tratar_chamadasistema
+* Salva contexto completo, recupera argumentos originais,
+* chama o despachador e restaura contexto
+* ELR_EL1 é avançado em 4 bytes para retornar a instrução
+* seguinte ao "svc 0"
+*/
+_tratar_chamadasistema:
+    ldr x0, [sp, 0]
+    ldr x1, [sp, 8]
+    ldr x2, [sp, 16]
+    ldr x3, [sp, 24]
+    ldr x4, [sp, 32]
+    ldr x5, [sp, 40]
+    ldr x8, [sp, 64]
+
+    bl _despachador_chamadasistema
+
+    str x0, [sp, 0]
+    restaurar_contexto
+
 caso_irq_el0_64:
     ldr x19, = msg_tipo_irq
     b _caso_fatal
@@ -233,16 +265,16 @@ msg_tipo_aarch32:
     .asciz "Tipo   : Excecao de codigo ARM64(não suportado)\r\n"
 // textos dos registradores
 msg_esr:
-    .asciz "Causa : "
+    .asciz "\nCausa : "
 msg_far:
-    .asciz "Endereço : "
+    .asciz "\nEndereço : "
 msg_elr:
-    .asciz "Instrução : "
+    .asciz "\nInstrução : "
 msg_spsr:
-    .asciz "Estado : "
+    .asciz "\nEstado : "
 msg_travado:
     .asciz "\r\nSistema travado. Reinicie o dispositivo\r\n======================================\r\n"
 msg_exc_configurado:
-    .asciz "[EXC]: Vetores de excecao configurados\r\n"
+    .asciz "[EXC]: Vetores de exceção configurados\r\n"
 msg_nova_linha:
     .asciz "\r\n"

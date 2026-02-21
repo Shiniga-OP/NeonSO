@@ -49,16 +49,10 @@ ns_abrir:
   add x29, sp, 128
   ldr x0, = .tex_comb_0
   bl _escrever_tex
-  ldr x0, = .tex_comb_1
-  bl _escrever_tex
-  ldr x0, = .tex_comb_2
-  bl _escrever_tex
-  ldr x0, = .tex_comb_3
-  bl _escrever_tex
   mov w0, 0
   mov w19, w0
-  str w0, [x29, 128]
-.B6:
+  str x0, [x29, 128]
+.B24:
   ldr w0, [x29, 128]
   mov w19, w0
   mov w0, 64
@@ -68,7 +62,7 @@ ns_abrir:
   mov w19, w0
   mov w0, w19
   cmp w0, 0
-  beq .B7
+  beq .B25
   ldr w0, [x29, 128]
   mov w1, w0
   str w1, [sp, -16]!
@@ -79,9 +73,9 @@ ns_abrir:
   strb w0, [x2]
   ldr w0, [x29, 128]
   add w0, w0, 1
-  str w0, [x29, 128]
-  b .B6
-.B7:
+  str x0, [x29, 128]
+  b .B24
+.B25:
   add sp, sp, 0  // limpa temporarios
   bl ns_loop
   b 1f
@@ -123,7 +117,7 @@ ns_loop:
   mov w19, w0
   mov w0, w19
   cmp w0, 0
-  beq .B8
+  beq .B26
   ldr x0, = global_conta
   ldr w0, [x0]
   mov w19, w0
@@ -134,7 +128,7 @@ ns_loop:
   mov w19, w0
   mov w0, w19
   cmp w0, 0
-  beq .B9
+  beq .B27
   ldr x0, = global_conta
   ldr w0, [x0]
   sub w0, w0, 1
@@ -155,11 +149,11 @@ ns_loop:
   bl _escrever_car
   mov w0, 8 // byte: 0x08
   bl _escrever_car
-  b .B10
-.B9:
-.B10:
-  b .B11
-.B8:
+  b .B28
+.B27:
+.B28:
+  b .B29
+.B26:
   ldrb w0, [x29, -32]
   mov w19, w0
   mov w0, 13 // byte: 0x0D
@@ -169,7 +163,7 @@ ns_loop:
   mov w19, w0
   mov w0, w19
   cmp w0, 0
-  beq .B12
+  beq .B30
   mov w0, 10
   bl _escrever_car
   ldr x0, = global_comando
@@ -184,13 +178,11 @@ ns_loop:
   mov w19, w0
   mov w0, w19
   cmp w0, 0
-  beq .B13
-  ldr x0, = .tex_comb_4
+  beq .B31
+  ldr x0, = .tex_comb_1
   bl _escrever_tex
-  ldr x0, = .tex_11
-  bl _escrever_tex
-  b .B14
-.B13:
+  b .B32
+.B31:
   ldr x0, = global_comando
   str x0, [sp, -16]!  // salva param 0 (ponteiro/longo)
   ldr x0, = .tex_12
@@ -203,13 +195,11 @@ ns_loop:
   mov w19, w0
   mov w0, w19
   cmp w0, 0
-  beq .B15
-  ldr x0, = .tex_comb_5
+  beq .B33
+  ldr x0, = .tex_comb_2
   bl _escrever_tex
-  ldr x0, = .tex_comb_6
-  bl _escrever_tex
-  b .B16
-.B15:
+  b .B34
+.B33:
   ldr x0, = global_comando
   str x0, [sp, -16]!  // salva param 0 (ponteiro/longo)
   ldr x0, = .tex_17
@@ -222,11 +212,11 @@ ns_loop:
   mov w19, w0
   mov w0, w19
   cmp w0, 0
-  beq .B17
+  beq .B35
   add sp, sp, 0  // limpa temporarios
   bl mudar_cor
-  b .B18
-.B17:
+  b .B36
+.B35:
   ldr x0, = global_comando
   str x0, [sp, -16]!  // salva param 0 (ponteiro/longo)
   ldr x0, = .tex_18
@@ -239,7 +229,7 @@ ns_loop:
   mov w19, w0
   mov w0, w19
   cmp w0, 0
-  beq .B19
+  beq .B37
   mov w0, 100
   str w0, [sp, -16]!  // salva param 0 (int/bool/char/byte)
   mov w0, 100
@@ -265,8 +255,8 @@ ns_loop:
   bl _render_retangulo
   add sp, sp, 0  // limpa temporarios
   bl _att_tela
-  b .B20
-.B19:
+  b .B38
+.B37:
   ldr x0, = global_conta
   ldr w0, [x0]
   mov w19, w0
@@ -277,24 +267,24 @@ ns_loop:
   mov w19, w0
   mov w0, w19
   cmp w0, 0
-  beq .B21
+  beq .B39
   ldr x0, = .tex_19
   bl _escrever_tex
   ldr x0, = global_comando
   bl _escrever_tex
   ldr x0, = .tex_20
   bl _escrever_tex
-  b .B22
-.B21:
-.B22:
-.B20:
-.B18:
-.B16:
-.B14:
+  b .B40
+.B39:
+.B40:
+.B38:
+.B36:
+.B34:
+.B32:
   mov w0, 0
   mov w19, w0
-  str w0, [x29, 144]
-.B24:
+  str x0, [x29, 144]
+.B42:
   ldr w0, [x29, 144]
   mov w19, w0
   mov w0, 64
@@ -304,7 +294,7 @@ ns_loop:
   mov w19, w0
   mov w0, w19
   cmp w0, 0
-  beq .B25
+  beq .B43
   ldr w0, [x29, 144]
   mov w1, w0
   str w1, [sp, -16]!
@@ -315,9 +305,9 @@ ns_loop:
   strb w0, [x2]
   ldr w0, [x29, 144]
   add w0, w0, 1
-  str w0, [x29, 144]
-  b .B24
-.B25:
+  str x0, [x29, 144]
+  b .B42
+.B43:
   mov w0, 0
   mov w19, w0
   mov w0, w19
@@ -325,8 +315,8 @@ ns_loop:
   str w0, [x1]
   ldr x0, = .tex_7
   bl _escrever_tex
-  b .B26
-.B12:
+  b .B44
+.B30:
   ldrb w0, [x29, -32]
   mov w19, w0
   mov w0, 32 // byte: 0x20
@@ -349,7 +339,7 @@ ns_loop:
   mov w19, w0
   mov w0, w19
   cmp w0, 0
-  beq .B27
+  beq .B45
   ldr x0, = global_conta
   ldr w0, [x0]
   mov w19, w0
@@ -360,7 +350,7 @@ ns_loop:
   mov w19, w0
   mov w0, w19
   cmp w0, 0
-  beq .B28
+  beq .B46
   ldrb w0, [x29, -32]
   bl _escrever_car
   ldr x0, = global_conta
@@ -377,14 +367,14 @@ ns_loop:
   add w0, w0, 1
   ldr x1, = global_conta
   str w0, [x1]
-  b .B29
-.B28:
+  b .B47
+.B46:
+.B47:
+  b .B48
+.B45:
+.B48:
+.B44:
 .B29:
-  b .B30
-.B27:
-.B30:
-.B26:
-.B11:
 // inicio assembly manual
 ldp x29, x30, [sp, 144]
 add sp, sp, 160
@@ -415,7 +405,7 @@ mudar_cor:
   mov w19, w0
   mov w0, w19
   cmp w0, 0
-  beq .B31
+  beq .B49
   movz w0, 65280 // byte: 0xFF00FF00
   movk w0, 65280, lsl 16
   mov w19, w0
@@ -424,8 +414,8 @@ mudar_cor:
   str w0, [x1]
   ldr x0, = .tex_21
   bl _escrever_tex
-  b .B32
-.B31:
+  b .B50
+.B49:
   ldr x0, = global_cor
   ldr w0, [x0]
   mov w19, w0
@@ -437,7 +427,7 @@ mudar_cor:
   mov w19, w0
   mov w0, w19
   cmp w0, 0
-  beq .B33
+  beq .B51
   movz w0, 255 // byte: 0xFF0000FF
   movk w0, 65280, lsl 16
   mov w19, w0
@@ -446,8 +436,8 @@ mudar_cor:
   str w0, [x1]
   ldr x0, = .tex_22
   bl _escrever_tex
-  b .B34
-.B33:
+  b .B52
+.B51:
   movz w0, 0 // byte: 0xFFFF0000
   movk w0, 65535, lsl 16
   mov w19, w0
@@ -456,8 +446,8 @@ mudar_cor:
   str w0, [x1]
   ldr x0, = .tex_23
   bl _escrever_tex
-.B34:
-.B32:
+.B52:
+.B50:
   ldr x0, = global_cor
   ldr w0, [x0]
   str w0, [sp, -16]!  // salva param 0 (int/bool/char/byte)
@@ -480,7 +470,6 @@ mudar_cor:
 .tex_2: .asciz "[Neon Script]: sess\303\243o iniciada\n\n"
 .tex_7: .asciz "~ $ "
 .tex_8: .asciz "-status"
-.tex_11: .asciz "[Pilha]: 16 KB\n"
 .tex_12: .asciz "-ajuda"
 .tex_17: .asciz "-cor"
 .tex_18: .asciz "-render"
@@ -495,20 +484,16 @@ mudar_cor:
 .section .data
 .align 3
 global_comando:
-  .asciz "[FPB]: teste de FPB funcionando
-"
-  .space 31
+  .space 64
+.align 3
 global_conta:
   .word 0
+.align 3
 global_cor:
   .word -65536
 
 .section .rodata
 .align 2
-.tex_comb_0: .asciz "[FPB]: teste de FPB funcionando\n[Neon Script]: abrindo sess\303\243o...\n"
-.tex_comb_1: .asciz "[Neon Script]: sess\303\243o iniciada\n\n[NEON]: Inicializado com sucesso\n"
-.tex_comb_2: .asciz "[Direitos Autorais]: Foca-do Est\303\272dios\n[Autor]: Shiniga-OP\n\n"
-.tex_comb_3: .asciz "Digite \"-ajuda\" para ver todos os comandos!\n\n~ $ "
-.tex_comb_4: .asciz "[Kernel]: Neon 0.0.1\n[Arquitetura]: ARM64\n[Bibliotecas]: Neon Script 0.0.2\n"
-.tex_comb_5: .asciz "[Comandos]:\n-status: status do kernel\n"
-.tex_comb_6: .asciz "-cor: muda a cor da tela (azul, vermelho e verde)\n-render: desenha um retangulo vermelho na tela\n"
+.tex_comb_0: .asciz "[FPB]: teste de FPB funcionando\n[Neon Script]: abrindo sess\303\243o...\n[Neon Script]: sess\303\243o iniciada\n\n[NEON]: Inicializado com sucesso\n[Direitos Autorais]: Foca-do Est\303\272dios\n[Autor]: Shiniga-OP\n\nDigite \"-ajuda\" para ver todos os comandos!\n\n~ $ "
+.tex_comb_1: .asciz "[Kernel]: Neon 0.0.1\n[Arquitetura]: ARM64\n[Bibliotecas]: Neon Script 0.0.2\n[Pilha]: 16 KB\n"
+.tex_comb_2: .asciz "[Comandos]:\n-status: status do kernel\n-cor: muda a cor da tela (azul, vermelho e verde)\n-render: desenha um retangulo vermelho na tela\n"
